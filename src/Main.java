@@ -6,11 +6,11 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException,
 			IOException {
 		Uploader up = new Uploader(new File("/dev/ttyUSB1"));
-		Scanner s = new Scanner(System.in);
-		boolean exit = false;
-		String tmp;
-		while ((tmp = s.nextLine()) != null && !exit) {
-			switch (tmp.trim()) {
+		try (Scanner s = new Scanner(System.in)) {
+			boolean exit = false;
+			String tmp;
+			while ((tmp = s.nextLine()) != null && !exit) {
+				switch (tmp.trim()) {
 				case "exit":
 					exit = true;
 					continue;
@@ -22,9 +22,9 @@ public class Main {
 					continue;
 				default:
 					break;
-			}
-			String[] parts = tmp.split(" ");
-			switch (parts[0]) {
+				}
+				String[] parts = tmp.split(" ");
+				switch (parts[0]) {
 				case "run":
 					up.runFile(new File(parts[1]));
 					continue;
@@ -50,8 +50,9 @@ public class Main {
 					up.restart();
 				default:
 					break;
+				}
+				up.runPrompt(tmp);
 			}
-			up.runPrompt(tmp);
 		}
 		System.exit(0);
 	}
